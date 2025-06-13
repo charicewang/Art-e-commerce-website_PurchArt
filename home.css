@@ -1,0 +1,486 @@
+body{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.section{
+    text-align: left;
+    padding-left: 5%;
+}
+
+h2 {
+    margin: 0%;
+}
+
+/*去除 a的底線跟顏色改變*/
+a {
+    text-decoration: none;
+    color: black;
+}
+.show{
+    display: inline;
+}
+
+.hide{
+    display: none;
+}
+
+.flex_container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#header {
+    /*向上滑會固定於頂端*/
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0; 
+	height: 10%;
+    padding: 0% 3%;
+    z-index: 999;/*最前面*/
+
+    /*將header內容物至於兩端*/
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: none;
+	color: black;
+	text-align: center;
+
+}
+
+button{
+    background-color: unset;
+    border: none;
+    margin: 0%;
+    padding: 0%;
+}
+
+nav ul{
+list-style: none;
+display: flex;
+justify-content: center;
+}
+
+nav ul li a{
+color: #666;
+padding:10px;
+}
+
+/*決定li a下面線的基礎*/
+
+
+/*menu botton*/
+
+.openbtn9{
+    position: relative;/*ボタン内側の基点となるためrelativeを指定*/
+    background: white;
+    cursor: pointer;
+      width: 50px;
+      height:50px;
+    border-radius: 5px;
+    overflow: hidden;/*ジャンプしてはみ出た要素を消す*/
+  }
+    
+  /*ボタン内側*/
+  
+  .openbtn9 .openbtn-area{
+      transition: all .4s;/*アニメーションの設定*/
+  }
+  
+  .openbtn9 span{
+      display: inline-block;
+      transition: all .4s;/*アニメーションの設定*/
+      position: absolute;
+      left: 14px;
+      height: 3px;
+      border-radius: 2px;
+    background: gray;
+      width: 45%;
+    }
+  
+  
+  .openbtn9 span:nth-of-type(1) {
+    top:15px; 
+  }
+  
+  .openbtn9 span:nth-of-type(2) {
+    top:23px;
+  }
+  
+  .openbtn9 span:nth-of-type(3) {
+    top:31px;
+  }
+  
+  
+  /*activeクラスが付与されると .openbtn-areaが360度回転し、
+  その中の線のtopの位置や形状が変化して×に*/
+  
+  .openbtn9.active .openbtn-area{
+    transform: rotateX(360deg);
+  }
+  
+  .openbtn9.active span:nth-of-type(1) {
+      top: 18px;
+      left: 18px;
+      transform: translateY(6px) rotate(-135deg);
+      width: 30%;
+  }
+  
+  .openbtn9.active span:nth-of-type(2) {
+    opacity: 0;
+  }
+  
+  .openbtn9.active span:nth-of-type(3){
+      top: 30px;
+      left: 18px;
+      transform: translateY(-6px) rotate(135deg);
+      width: 30%;
+  }
+
+/*end of menu botton*/
+
+
+#big_pic {
+    width: 100%;
+    height: 85vh;
+    position: relative;
+    color: whitesmoke;
+    text-align: center;
+}
+
+#big_pic h1::before{
+    background: none;
+}
+
+/*上滑時頁面蓋過圖片*/
+#big_pic:before{
+  content:"";
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
+  width:100%;
+  height: 100vh;
+  /*背景圖*/
+  background:url("螢幕擷取畫面\ \(104\).png") no-repeat center;
+  background-size: cover;
+}
+
+.text {
+    float: left;
+    padding-top: 15%;
+    font-size: 25px;
+    color: black;
+}
+
+/*test*/
+.sort-btn{
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	padding:50px 20px;
+}
+
+.sort-btn li{
+	background:#eee;
+list-style:none;
+	border-radius:10px;
+	cursor: pointer;
+	padding: 10px;
+	margin:0 10px;
+}
+
+.sort-btn li.active{/*ボタンに現在地＝activeというクラス名がついたら背景色を変更*/
+	background:#ccc;	
+}
+
+/*横幅が480px以下になった際の指定*/
+@media only screen and (max-width: 480px) {
+.sort-btn{
+	justify-content: space-between;
+}
+	
+.sort-btn li{
+	width:48%;
+	margin:0 0 10px 0;
+	text-align:center;
+	}	
+}
+
+/*＝＝＝Muuriのレイアウトのための調整 */
+.grid {
+  position: relative;/*並び替えの基準点を指定*/
+}
+
+/*各画像の横幅などの設定*/
+.item {
+  display: block;
+  position: absolute;
+  width: 100%;/*横並びで3つ表示*/
+  z-index: 1;
+list-style:none;
+}
+
+/*内側のボックスの高さが崩れないように維持*/
+.item-content {
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    float: inline-start;
+    width: 100%;
+    height: 100%;
+}
+
+/*画像の横幅を100%にしてレスポンシブ化*/
+.grid img{
+	width:100%;
+	height:auto;
+	vertical-align: bottom;/*画像の下にできる余白を削除*/
+}
+
+/*横幅が768px以下になった際の指定*/
+@media only screen and (max-width: 768px) {
+.item {
+  width: 49.5%;/*横並びで2つ表示*/
+}
+}
+
+/*＝＝＝fancyboxサムネイル背景と画像選択時の枠線の指定*/
+.fancybox-thumbs {
+    background: transparent!important;
+}
+
+.fancybox-thumbs__list a:before {
+    border: 6px solid #FA999B;
+}
+/*end of test*/
+
+#latest {
+    background-color: white;
+    padding: 5% 5%;
+    text-align: center;
+    height: 70%;
+}
+
+* {box-sizing:border-box}
+
+
+
+/*slider*/
+/*==================================================
+スライダーのためのcss
+===================================*/
+
+.slider {/*横幅94%で左右に余白を持たせて中央寄せ*/
+    width:94%;
+     margin:0 auto;
+ }
+ 
+ .slider img {
+     width:100%;/*スライダー内の画像を横幅100%に*/
+     height:auto;
+ }
+ 
+ /*slickのJSで書かれるタグ内、スライド左右の余白調整*/
+ 
+ .slider .slick-slide {
+     margin:0 10px;
+ }
+ 
+ /*矢印の設定*/
+ 
+ /*戻る、次へ矢印の位置*/
+ .slick-prev, 
+ .slick-next {
+     position: absolute;/*絶対配置にする*/
+     top: 42%;
+     cursor: pointer;/*マウスカーソルを指マークに*/
+     outline: none;/*クリックをしたら出てくる枠線を消す*/
+     border-top: 2px solid #666;/*矢印の色*/
+     border-right: 2px solid #666;/*矢印の色*/
+     height: 15px;
+     width: 15px;
+ }
+ 
+ .slick-prev {/*戻る矢印の位置と形状*/
+     left: -1.5%;
+     transform: rotate(-135deg);
+ }
+ 
+ .slick-next {/*次へ矢印の位置と形状*/
+     right: -1.5%;
+     transform: rotate(45deg);
+ }
+
+ /*end of slide*/
+
+ ul{
+    margin:0;
+    padding: 0;
+    list-style: none;
+  }
+  
+
+ video{
+    max-height: 250px;
+}
+ 
+
+.blog {
+    text-align: left;
+    object-fit: cover;
+    width: 230px;
+    margin: 0% 1%;
+    padding-top:5%;
+    color: #666;
+    overflow: hidden;
+}
+
+.blog p{
+    margin: 0%;
+}
+
+.pic {
+    width: 100%;
+    height: 230Px;
+    overflow: hidden;
+}
+
+.pic img {
+    margin: 0%;
+    width:100%;
+    height: 100%;
+    object-fit: cover;/*讓圖片保持原本的比例，同時填滿first_section區塊，所以會裁切掉部分圖片*/
+    object-position:50% 50%;/*置中*/
+}
+
+.pic img:hover{
+    transform: scale(1.1);
+    transition-duration: 2s;
+}
+
+
+
+#map {
+    background-color: white;
+    padding: 0% 5%;
+    padding-bottom: 10%;
+    text-align: center;
+}
+
+#search {
+    margin: auto;
+    display: flex;
+    align-items: center;
+    width: 400px;
+    height: 40px;
+    margin-top: 3%;
+    background-color: white;
+    border-bottom: lightgray 3px solid;
+}
+
+#search img{
+    height: 25px;
+    margin: 10px 0%;
+}
+
+#search input{
+    width: 270px;
+    height: 100%;
+    border: none;
+    outline: none;
+    background-color:white;
+    font-size: 100%;
+}
+
+.place {
+    padding-top: 5%;
+    width: 20%;
+    height: 80%;
+}
+
+.place div{
+    width: 100%;
+    color: #666
+ }
+
+.place img{
+    width: 90%;
+    vertical-align: middle;
+}
+
+.place hr{
+    size: 1px;
+}
+
+.place a{
+    text-decoration: none;
+    color: black;
+}
+
+.place img:hover, .place p:hover{
+    filter: drop-shadow(0 0 0.25rem gray);
+    transition-duration: 1s;
+    text-decoration: underline;
+}
+
+footer {
+    background-color: gainsboro;
+    margin: 0px;
+    padding: 1%;
+}
+
+#back_to_top{
+    width: 4%;
+    min-width: 40px;
+    z-index: 999;
+    position: fixed;
+    right: 5%;
+    bottom: 7%;
+    text-decoration: none;
+    color: #666;
+    text-align: right;
+}
+
+#back_to_top img{
+    padding: 2.5%;
+    width: 90%;
+}
+
+#back_to_top img:hover{
+    border-radius: 10%;
+    border: 2px solid black;
+}
+
+@media screen and (max-width: 900px){
+    .right {
+        width: 100%;
+    }
+    
+    .left{
+        display: none;
+    }
+
+    .textbox{
+        display: none;
+    }
+
+    .s-textbox , .s-textbox p{
+        background-color: antiquewhite;
+        display: block;
+        color: black;
+    }
+
+    .s-textbox:hover{
+        box-shadow: 0 15px 30px -5px rgba(0,0,0,.15), 0 0 5px rgba(0,0,0,.1);
+	    transform: translateY(-4px);
+        transition: 1s;
+    }
+}
+
+/*參考資料
+h1下方的線條：https://saruwakakun.com/html-css/reference/h-design
+hover時出現的線條：https://coco-factory.jp/ugokuweb/move01/5-3-1/
+hover時上浮：https://www.ameamelog.com/float-effect/
+*/

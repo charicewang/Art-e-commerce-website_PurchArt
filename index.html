@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>purchArt Chatroom</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+    </script>
+    <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        #container {
+            top: 50px;
+            width: 400px;
+            margin: 0 auto;
+            display: block;
+            position: relative;
+            overflow-wrap: break-word;
+
+        }
+
+        #status-box {
+            text-align: right;
+            font-size: .6em;
+            color: grey;
+            background-color: rgb(255, 237, 215);
+            border-radius: 5px;
+        }
+
+        #content {
+            width: 100%;
+            height: 350px;
+            border: 0px solid bisque;
+            background-color: rgb(255, 237, 215);
+            /*border-radius: 5px;*/
+            white-space: pre-wrap;
+            align-items: flex-start;
+            /*border-radius: 5px;*/
+        }
+
+        #send-box {
+            width: 100%;
+            text-align: center;
+            border: 1px lightgray;
+            background-color: rgb(255, 237, 215);
+            border-radius: 5px;
+        }
+
+        #send-form {
+            display: flex;
+            justify-content: flex-start;
+            border: solid 2px rgb(255, 237, 215);
+            border-radius: 5px;
+        }
+
+        #send-box input {
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        #send-box input.error {
+            border: 1px solid red;
+        }
+
+        input[name="name"] {
+            width: 15%;
+            font-weight: 1000;
+            position: static;
+            margin: 1%;
+            border: none;
+            /*border-right: solid 1px lightgrey;*/
+            /*background-color: unset;*/
+        }
+
+        textarea[name="msg"] {
+            width: 75%;
+            margin: 1%;
+            border: none;
+            border-radius: 5px;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        button {
+            border: none;
+        }
+
+        input[name="name"]:focus {
+            outline: none;
+            color: cornflowerblue;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+        #SEND {
+            width: 10%;
+            height: 10%;
+            padding: 0%;
+            margin: 0%;
+            margin-left: 1%;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        #SEND:hover {
+            background-color: darkgrey;
+        }
+
+        img {
+            width: 100%;
+        }
+
+        .msg {
+            width: 90%;
+            max-width: 90%;
+            padding: 5px 0 5px 10px;
+            height: max-content;
+            display: inline-flex;
+            align-items: left;
+        }
+
+        .msg>div {
+            width: 23%;
+            padding-right: 2%;
+            display: inline-block;
+        }
+
+        .msg>div::before {
+            color: darkred;
+            /*content: " [ ";*/
+        }
+
+        .msg>div::after {
+            color: rgb(68, 10, 156);
+            content: " :";
+        }
+
+        .place.img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .section {
+            text-align: left;
+            padding-left: 5%;
+        }
+
+        h2 {
+            margin: 0%;
+        }
+
+        /*去除 a的底線跟顏色改變*/
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .flex_container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        #header {
+            /*向上滑會固定於頂端*/
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            height: 10%;
+            padding: 0% 3%;
+            z-index: 999;
+            /*最前面*/
+
+            /*將header內容物至於兩端*/
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: none;
+            color: black;
+            text-align: center;
+
+        }
+
+        .icon {
+            max-height: 30px;
+            margin-right: 5px;
+            margin-top: 10px;
+        }
+
+        .in {
+            display: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+        }
+
+        /*2階層目以降は横並びにしない*/
+        nav ul ul {
+            display: block;
+        }
+
+        nav ul li a {
+            color: #666;
+            padding: 10px;
+        }
+
+        nav li.has-child>div {
+            /*絶対配置で位置を指定*/
+            position: absolute;
+            border-radius: 5%;
+            right: 0;
+            top: 62px;
+            /*形状を指定*/
+            background: white;
+            width: 200px;
+            /*はじめは非表示*/
+            visibility: hidden;
+            opacity: 0;
+            /*アニメーション設定*/
+            transition: all .3s;
+        }
+
+
+        nav ul li a:hover {
+            color: black;
+        }
+
+        /*hoverしたら表示*/
+        nav li.has-child:hover>div,
+        nav li.has-child:active>div {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .pro_icon {
+            padding-top: 5%;
+            margin: 5%;
+            height: 75px;
+            display: flex;
+        }
+
+        .pro_icon img {
+            padding-left: 10%;
+            height: 100%;
+            border-radius: 50%;
+            margin: 0%;
+        }
+
+        .info {
+            padding-top: 10%;
+            text-align: left;
+            margin: 5%;
+        }
+
+        .info p {
+            margin: 0%;
+        }
+
+        .number {
+            width: 40%;
+            padding: 5%;
+        }
+
+        .number p {
+            margin: 0%;
+        }
+
+        .menu {
+            text-align: left;
+            width: 90%;
+            margin: 5%;
+        }
+
+        .menu :hover {
+            background-color: whitesmoke;
+        }
+
+        /*menu botton*/
+
+        .openbtn9 {
+            position: relative;
+            /*ボタン内側の基点となるためrelativeを指定*/
+            background: white;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            overflow: hidden;
+            /*ジャンプしてはみ出た要素を消す*/
+        }
+
+        /*ボタン内側*/
+
+        .openbtn9 .openbtn-area {
+            transition: all .4s;
+            /*アニメーションの設定*/
+        }
+
+        .openbtn9 span {
+            display: inline-block;
+            transition: all .4s;
+            /*アニメーションの設定*/
+            position: absolute;
+            left: 14px;
+            height: 3px;
+            border-radius: 2px;
+            background: gray;
+            width: 45%;
+        }
+
+
+        .openbtn9 span:nth-of-type(1) {
+            top: 15px;
+        }
+
+        .openbtn9 span:nth-of-type(2) {
+            top: 23px;
+        }
+
+        .openbtn9 span:nth-of-type(3) {
+            top: 31px;
+        }
+
+
+        /*activeクラスが付与されると .openbtn-areaが360度回転し、
+  その中の線のtopの位置や形状が変化して×に*/
+
+        .openbtn9.active .openbtn-area {
+            transform: rotateX(360deg);
+        }
+
+        .openbtn9.active span:nth-of-type(1) {
+            top: 18px;
+            left: 18px;
+            transform: translateY(6px) rotate(-135deg);
+            width: 30%;
+        }
+
+        .openbtn9.active span:nth-of-type(2) {
+            opacity: 0;
+        }
+
+        .openbtn9.active span:nth-of-type(3) {
+            top: 30px;
+            left: 18px;
+            transform: translateY(-6px) rotate(135deg);
+            width: 30%;
+        }
+
+        /*end of menu botton*/
+
+
+        #big_pic {
+            width: 100%;
+            height: 85vh;
+            position: relative;
+            color: whitesmoke;
+            text-align: center;
+        }
+
+        #big_pic h1::before {
+            background: none;
+        }
+
+        /*上滑時頁面蓋過圖片*/
+        #big_pic:before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100vh;
+            /*背景圖*/
+            background: url("螢幕擷取畫面\ \(104\).png") no-repeat center;
+            background-size: cover;
+        }
+
+        .text {
+            float: left;
+            padding-top: 15%;
+            font-size: 25px;
+            color: black;
+        }
+
+        /*test*/
+        .sort-btn {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 50px 20px;
+        }
+
+        .sort-btn li {
+            background: #eee;
+            list-style: none;
+            border-radius: 10px;
+            cursor: pointer;
+            padding: 10px;
+            margin: 0 10px;
+        }
+
+        .sort-btn li.active {
+            /*ボタンに現在地＝activeというクラス名がついたら背景色を変更*/
+            background: #ccc;
+        }
+
+        /*横幅が480px以下になった際の指定*/
+        @media only screen and (max-width: 480px) {
+            .sort-btn {
+                justify-content: space-between;
+            }
+
+            .sort-btn li {
+                width: 48%;
+                margin: 0 0 10px 0;
+                text-align: center;
+            }
+        }
+
+        /*＝＝＝Muuriのレイアウトのための調整 */
+        .grid {
+            position: relative;
+            /*並び替えの基準点を指定*/
+        }
+
+        /*各画像の横幅などの設定*/
+        .item {
+            display: block;
+            position: absolute;
+            width: 100%;
+            /*横並びで3つ表示*/
+            z-index: 1;
+            list-style: none;
+        }
+
+        /*内側のボックスの高さが崩れないように維持*/
+        .item-content {
+            justify-content: center;
+            display: flex;
+            flex-wrap: wrap;
+            float: inline-start;
+            width: 100%;
+            height: 100%;
+        }
+
+        /*画像の横幅を100%にしてレスポンシブ化*/
+        .grid img {
+            width: 100%;
+            height: auto;
+            vertical-align: bottom;
+            /*画像の下にできる余白を削除*/
+        }
+
+        /*横幅が768px以下になった際の指定*/
+        @media only screen and (max-width: 768px) {
+            .item {
+                width: 49.5%;
+                /*横並びで2つ表示*/
+            }
+        }
+
+        /*＝＝＝fancyboxサムネイル背景と画像選択時の枠線の指定*/
+        .fancybox-thumbs {
+            background: transparent !important;
+        }
+
+        .fancybox-thumbs__list a:before {
+            border: 6px solid #FA999B;
+        }
+
+        /*end of test*/
+
+        #latest {
+            background-color: white;
+            padding: 5% 5%;
+            text-align: center;
+            height: 70%;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+
+
+        /*slider*/
+        /*==================================================
+スライダーのためのcss
+===================================*/
+
+        .slider {
+            /*横幅94%で左右に余白を持たせて中央寄せ*/
+            width: 94%;
+            margin: 0 auto;
+        }
+
+        .slider img {
+            width: 100%;
+            /*スライダー内の画像を横幅100%に*/
+            height: auto;
+        }
+
+        /*slickのJSで書かれるタグ内、スライド左右の余白調整*/
+
+        .slider .slick-slide {
+            margin: 0 10px;
+        }
+
+        /*矢印の設定*/
+
+        /*戻る、次へ矢印の位置*/
+        .slick-prev,
+        .slick-next {
+            position: absolute;
+            /*絶対配置にする*/
+            top: 42%;
+            cursor: pointer;
+            /*マウスカーソルを指マークに*/
+            outline: none;
+            /*クリックをしたら出てくる枠線を消す*/
+            border-top: 2px solid #666;
+            /*矢印の色*/
+            border-right: 2px solid #666;
+            /*矢印の色*/
+            height: 15px;
+            width: 15px;
+        }
+
+        .slick-prev {
+            /*戻る矢印の位置と形状*/
+            left: -1.5%;
+            transform: rotate(-135deg);
+        }
+
+        .slick-next {
+            /*次へ矢印の位置と形状*/
+            right: -1.5%;
+            transform: rotate(45deg);
+        }
+
+        /*end of slide*/
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+
+        video {
+            max-height: 250px;
+        }
+
+
+        .blog {
+            text-align: left;
+            object-fit: cover;
+            width: 230px;
+            margin: 0% 1%;
+            padding-top: 5%;
+            color: #666;
+            overflow: hidden;
+        }
+
+        .blog p {
+            margin: 0%;
+        }
+
+        .pic {
+            width: 100%;
+            height: 230Px;
+            overflow: hidden;
+        }
+
+        .pic img {
+            margin: 0%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /*讓圖片保持原本的比例，同時填滿first_section區塊，所以會裁切掉部分圖片*/
+            object-position: 50% 50%;
+            /*置中*/
+        }
+
+        .pic img:hover {
+            transform: scale(1.1);
+            transition-duration: 2s;
+        }
+
+
+
+        #map {
+            background-color: white;
+            padding: 0% 5%;
+            padding-bottom: 10%;
+            text-align: center;
+        }
+
+        #search {
+            margin: auto;
+            display: flex;
+            align-items: center;
+            width: 400px;
+            height: 40px;
+            background-color: white;
+            border-bottom: lightgray 3px solid;
+        }
+
+        #search img {
+            height: 25px;
+            margin: 10px 0%;
+        }
+
+        #search input {
+            width: 270px;
+            height: 100%;
+            border: none;
+            outline: none;
+            background-color: white;
+            font-size: 100%;
+        }
+
+        .place {
+            padding-top: 5%;
+            width: 20%;
+            height: 80%;
+        }
+
+        .place div {
+            width: 100%;
+            color: #666
+        }
+
+        .place img {
+            width: 90%;
+            vertical-align: middle;
+        }
+
+        .place hr {
+            size: 1px;
+        }
+
+        .place a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .place img:hover,
+        .place p:hover {
+            filter: drop-shadow(0 0 0.25rem gray);
+            transition-duration: 1s;
+            text-decoration: underline;
+        }
+
+        footer {
+            background-color: gainsboro;
+            margin: 0px;
+            padding: 1%;
+        }
+
+        #back_to_top {
+            width: 4%;
+            min-width: 40px;
+            z-index: 999;
+            position: fixed;
+            right: 5%;
+            bottom: 7%;
+            text-decoration: none;
+            color: #666;
+            text-align: right;
+        }
+
+        #back_to_top img {
+            padding: 2.5%;
+            width: 90%;
+        }
+
+        #back_to_top img:hover {
+            border-radius: 10%;
+            border: 2px solid black;
+        }
+
+        @media screen and (max-width: 900px) {
+            .right {
+                width: 100%;
+            }
+
+            .left {
+                display: none;
+            }
+
+            .textbox {
+                display: none;
+            }
+
+            .s-textbox,
+            .s-textbox p {
+                background-color: antiquewhite;
+                display: block;
+                color: black;
+            }
+
+            .s-textbox:hover {
+                box-shadow: 0 15px 30px -5px rgba(0, 0, 0, .15), 0 0 5px rgba(0, 0, 0, .1);
+                transform: translateY(-4px);
+                transition: 1s;
+            }
+        }
+
+        /*LOG IN*/
+        /*infoエリアをはじめは非表示*/
+        #log_in {
+            display: none;
+        }
+
+        /*モーダルの横幅を変更したい場合*/
+        .modaal-container {
+            max-width: 600px;
+        }
+
+        /*モーダルのボタンの色を変更したい場合*/
+        .modaal-close:after,
+        .modaal-close:before {
+            background: #ccc;
+        }
+
+        .modaal-close:focus:after,
+        .modaal-close:focus:before,
+        .modaal-close:hover:after,
+        .modaal-close:hover:before {
+            background: #666;
+        }
+
+
+        a {
+            color: gray;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: black;
+        }
+
+        .pull-right {
+            float: right;
+        }
+
+        .clear-fix {
+            clear: both;
+        }
+
+        #formWrapper {
+            width: 100%;
+            height: 90%;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0);
+            top: 0;
+            left: 0;
+            transition: all .3s ease;
+        }
+
+        div#form {
+            position: absolute;
+            width: 400px;
+            height: 320px;
+            height: auto;
+            background-color: #fff;
+            margin: auto;
+            border-radius: 5px;
+            padding: 20px;
+            left: 50%;
+            top: 50%;
+            margin-left: -180px;
+            margin-top: -200px;
+        }
+
+        div.form-item {
+            position: relative;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        input {
+            transition: all .2s ease;
+        }
+
+        input.form-style {
+            color: #8a8a8a;
+            display: block;
+            width: 90%;
+            height: 44px;
+            padding: 5px 5%;
+            border: 1px solid #ccc;
+            -moz-border-radius: 27px;
+            -webkit-border-radius: 27px;
+            border-radius: 27px;
+            -moz-background-clip: padding;
+            -webkit-background-clip: padding-box;
+            background-clip: padding-box;
+            background-color: #fff;
+            font-size: 105%;
+            letter-spacing: .8px;
+        }
+
+        div.form-item .form-style:focus {
+            outline: none;
+            border: 1px solid gray;
+            color: gray;
+        }
+
+        div.form-item p.formLabel {
+            position: absolute;
+            left: 26px;
+            top: 2px;
+            transition: all .4s ease;
+            color: #bbb;
+        }
+
+        input[type="submit"].login {
+            float: right;
+            width: 112px;
+            height: 37px;
+            border-radius: 19px;
+            -moz-background-clip: padding;
+            -webkit-background-clip: padding-box;
+            background-clip: padding-box;
+            background-color: antiquewhite;
+            border: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        input[type="submit"].login:hover {
+            background-color: bisque;
+            cursor: pointer;
+        }
+
+        input[type="submit"].login:focus {
+            outline: none;
+        }
+
+        #love {
+            height: 20px;
+            width: 20px;
+            margin-left: 200px;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+
+<header id="header">
+    <a href="Home_logged_in.php">
+        <h1>purchArt</h1>
+    </a>
+    <div id="search">
+        <input type="search" placeholder="Search">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#message"></a></li> <!--class="in"-->
+            <li class="has-child"> <!--class="in"-->
+                <div>
+                    <ul>
+                        <div class="pro_icon">
+                            <div class="info">
+                                <p>NAME</p>
+                                <p><small>id number</small></p>
+                            </div>
+                        </div>
+                        <div class="flex_container">
+                            <div class="number">
+                                <p>00,000</p>
+                                <p><small>followers</small></p>
+                            </div>
+                            <div class="number">
+                                <p>0,000</p>
+                                <p><small>follows</small></p>
+                            </div>
+                        </div>
+                        <li class="menu"><a href="ABOUT US.php">profile</a></li>
+                        <li class="menu"><a href="個人資訊編輯畫面.php">edit profile</a></li>
+                        <li class="menu"><a href="work.php">works</a></li>
+                        <li class="menu"><a href="編輯畫面.php">add work</a></li>
+                        <li class="menu"><a href="buy.php">goods</a></li>
+                        <li class="menu"><a href="上架畫面.php">add good</a></li>
+                        <li class="menu"><a href="#">bookmark</a></li>
+                        <br>
+                        <li class="menu"><a href="#">setting</a></li>
+                        <li class="menu"><a href="nowhome.php">LOG OUT</a></li>
+                        <br>
+                    </ul>
+                </div>
+
+            </li>
+
+            <li><a href="#purchace"></a></li> <!--class="in"-->
+            <button>
+                <div class="openbtn9">
+                    <div class="openbtn-area"><span></span><span></span><span></span></div>
+                </div>
+            </button>
+        </ul>
+    </nav>
+</header>
+
+<body>
+    <div id="container">
+        <div id="status-box">有<span id="online">0</span>個人正瀏覽此作品...</div>
+        <div id="content"></div>
+        <div id="send-box">
+            <form id="send-form">
+                <input type="text" name="name" id="name" placeholder="暱稱">
+                <textarea type="text" name="msg" id="message" placeholder="說點什麼？"></textarea>
+                <button type="submit" id="SEND">送出</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            var status = document.getElementById("status");
+            var online = document.getElementById("online");
+            var sendForm = document.getElementById("send-form");
+            var content = document.getElementById("content");
+
+            socket.on("connect", function () {
+                status.innerText = "Connected.";
+            });
+
+            socket.on("disconnect", function () {
+                status.innerText = "Disconnected.";
+                var announce = 'someone has left the chat!';
+            });
+
+            socket.on("online", function (amount) {
+                online.innerText = amount;
+            });
+
+            socket.on("msg", function (d) {
+                var msgBox = document.createElement("div")
+                msgBox.className = "msg";
+                var nameBox = document.createElement("div");
+                nameBox.className = "name";
+                nameBox.style.color = "rgb(210, 124, 20)";
+                var name = document.createTextNode(d.name);
+                var msg = document.createTextNode(d.msg);
+
+                nameBox.appendChild(name);
+                msgBox.appendChild(nameBox);
+                msgBox.appendChild(msg);
+                content.appendChild(msgBox);
+            });
+
+            sendForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                var ok = true;
+                var formData = {};
+                var formChild = sendForm.children;
+
+                for (var i = 0; i < sendForm.childElementCount; i++) {
+                    var child = formChild[i];
+                    if (child.name !== "") {
+                        var val = child.value;
+                        if (val === "" || !val) {
+                            ok = false;
+                            child.classList.add("error");
+                        } else {
+                            child.classList.remove("error");
+                            formData[child.name] = val;
+                        }
+                    }
+                }
+
+                if (ok) {
+                    socket.emit("send", formData);
+                    document.getElementById('message').value = "";
+                }
+            });
+
+
+        });
+    </script>
+</body>
+
+</html>

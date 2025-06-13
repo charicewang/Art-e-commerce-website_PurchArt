@@ -1,0 +1,255 @@
+body{
+    font-family: 'Montserrat', sans-serif;
+    margin: 2%;
+}
+
+h2 {
+    margin: 0%;
+}
+
+/*去除 a的底線跟顏色改變*/
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.hide{
+  display: none;
+}
+
+.show{
+  display: block;
+}
+
+#header {
+  /*向上滑會固定於頂端*/
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0; 
+  height: 10%;
+  padding: 0%;
+  z-index: 999;/*最前面*/
+
+  /*將header內容物至於兩端*/
+display: flex;
+align-items: center;
+background: none;
+color: black;
+text-align: center;
+
+}
+
+#search {
+  margin-left: 1%;
+  display: flex;
+  align-items: center;
+  width: 400px;
+  height: 40px;
+  background-color: white;
+}
+
+#search img{
+  height: 25px;
+  margin: 10px 0%;
+}
+
+#search input{
+  width: 270px;
+  height: 100%;
+  border: none;
+  outline: none;
+  background-color:white;
+  font-size: 100%;
+}
+
+button{
+  background-color: unset;
+  border: none;
+  margin: 0%;
+  padding: 0%;
+}
+
+nav ul{
+list-style: none;
+display: flex;
+justify-content: center;
+}
+
+nav ul li a{
+color: black;
+padding:10px;
+}
+
+/*menu botton*/
+
+.openbtn9{
+  position: relative;/*ボタン内側の基点となるためrelativeを指定*/
+  background: white;
+  cursor: pointer;
+    width: 50px;
+    height:50px;
+  border-radius: 5px;
+  overflow: hidden;/*ジャンプしてはみ出た要素を消す*/
+}
+  
+/*ボタン内側*/
+
+.openbtn9 .openbtn-area{
+    transition: all .4s;/*アニメーションの設定*/
+}
+
+.openbtn9 span{
+    display: inline-block;
+    transition: all .4s;/*アニメーションの設定*/
+    position: absolute;
+    left: 14px;
+    height: 3px;
+    border-radius: 2px;
+  background: gray;
+    width: 45%;
+  }
+
+
+.openbtn9 span:nth-of-type(1) {
+  top:15px; 
+}
+
+.openbtn9 span:nth-of-type(2) {
+  top:23px;
+}
+
+.openbtn9 span:nth-of-type(3) {
+  top:31px;
+}
+
+
+/*activeクラスが付与されると .openbtn-areaが360度回転し、
+その中の線のtopの位置や形状が変化して×に*/
+
+.openbtn9.active .openbtn-area{
+  transform: rotateX(360deg);
+}
+
+.openbtn9.active span:nth-of-type(1) {
+    top: 18px;
+    left: 18px;
+    transform: translateY(6px) rotate(-135deg);
+    width: 30%;
+}
+
+.openbtn9.active span:nth-of-type(2) {
+  opacity: 0;
+}
+
+.openbtn9.active span:nth-of-type(3){
+    top: 30px;
+    left: 18px;
+    transform: translateY(-6px) rotate(135deg);
+    width: 30%;
+}
+
+/*end of menu botton*/
+
+/*上滑時頁面蓋過圖片*/
+#big_pic:before{
+  content:"";
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
+  width:100%;
+  height: 100vh;
+  /*背景圖*/
+  background:url("螢幕擷取畫面\ \(104\).png") no-repeat center;
+  background-size: cover;
+}
+
+
+a{color:gray;text-decoration: none;}
+ a:hover{color:black; }
+ .pull-right{float: right;}
+ .clear-fix{clear:both;}
+
+ #formWrapper{
+   width:100%; 
+   height:90%; 
+   position: absolute; 
+   top:0; 
+   left:0;
+   transition:all .3s ease;
+}
+ 
+ div#form{
+   position: absolute;
+   width:360px;
+   height:320px;
+   height:auto;
+   background-color: #fff;
+   margin:auto;
+   border-radius: 5px;
+   padding:20px;
+   left:50%;
+   top:50%;
+   margin-left:-180px;
+   margin-top:-200px;
+ }
+
+.title{
+  text-align: center;
+  margin: 0%;
+}
+
+.title h1{
+  font-size: xx-large;
+  margin-bottom: 0%;
+}
+
+.title p{
+  margin-top: 0%;
+  margin-bottom: 20%;
+}
+
+ div.form-item{position: relative; display: block; margin-bottom: 20px;}
+ input{transition: all .2s ease;}
+
+ input.form-style{
+  color:#8a8a8a;
+  display: block;
+  width: 90%;
+  height: 44px;
+  padding: 5px 5%;
+  border:1px solid #ccc;
+  -moz-border-radius: 27px;
+  -webkit-border-radius: 27px;
+  border-radius: 27px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  background-color: #fff;
+  font-size: 105%;
+  letter-spacing: .8px;
+}
+div.form-item .form-style:focus{outline: none; border:1px solid gray; color: gray; }
+
+div.form-item p.formLabel {
+  position: absolute;
+  left:26px;
+  top:2px;
+  transition:all .4s ease;
+  color:#bbb;}
+
+input[type="submit"].login{
+  float:right;
+  width: 112px;
+  height: 37px;
+  border-radius: 19px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  background-color: antiquewhite;
+  border:none;
+  color: black;
+  font-weight: bold;
+}
+input[type="submit"].login:hover{background-color: bisque; cursor:pointer;}
+input[type="submit"].login:focus{outline: none;}

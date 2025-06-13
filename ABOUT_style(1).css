@@ -1,0 +1,392 @@
+body{
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
+
+h2 {
+    margin: 0%;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.flex_container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#header {
+    /*向上滑會固定於頂端*/
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0; 
+	height: 10%;
+	width:94%;
+    padding: 0% 3%;
+    z-index: 999;/*最前面*/
+
+    /*將header內容物至於兩端*/
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: unset;
+	color: black;
+	text-align: center;
+}
+
+#search {
+    margin: auto;
+    display: flex;
+    align-items: center;
+    width: 400px;
+    height: 40px;
+    margin-top: 3%;
+    background-color: white;
+    border-bottom: lightgray 3px solid;
+}
+
+#search img{
+    height: 25px;
+    margin: 10px 0%;
+}
+
+#search input{
+    width: 270px;
+    height: 100%;
+    border: none;
+    outline: none;
+    background-color:white;
+    font-size: 100%;
+}
+
+nav ul{
+list-style: none;
+display: flex;
+justify-content: center;
+}
+
+nav ul li a{
+color: #666;
+padding:10px;
+}
+/*menu botton*/
+
+.openbtn9{
+    position: relative;/*ボタン内側の基点となるためrelativeを指定*/
+    background: white;
+    cursor: pointer;
+      width: 50px;
+      height:50px;
+    border-radius: 5px;
+    overflow: hidden;/*ジャンプしてはみ出た要素を消す*/
+  }
+    
+  /*ボタン内側*/
+  
+  .openbtn9 .openbtn-area{
+      transition: all .4s;/*アニメーションの設定*/
+  }
+  
+  .openbtn9 span{
+      display: inline-block;
+      transition: all .4s;/*アニメーションの設定*/
+      position: absolute;
+      left: 14px;
+      height: 3px;
+      border-radius: 2px;
+    background: gray;
+      width: 45%;
+    }
+  
+  
+  .openbtn9 span:nth-of-type(1) {
+    top:15px; 
+  }
+  
+  .openbtn9 span:nth-of-type(2) {
+    top:23px;
+  }
+  
+  .openbtn9 span:nth-of-type(3) {
+    top:31px;
+  }
+  
+  
+  /*activeクラスが付与されると .openbtn-areaが360度回転し、
+  その中の線のtopの位置や形状が変化して×に*/
+  
+  .openbtn9.active .openbtn-area{
+    transform: rotateX(360deg);
+  }
+  
+  .openbtn9.active span:nth-of-type(1) {
+      top: 18px;
+      left: 18px;
+      transform: translateY(6px) rotate(-135deg);
+      width: 30%;
+  }
+  
+  .openbtn9.active span:nth-of-type(2) {
+    opacity: 0;
+  }
+  
+  .openbtn9.active span:nth-of-type(3){
+      top: 30px;
+      left: 18px;
+      transform: translateY(-6px) rotate(135deg);
+      width: 30%;
+  }
+
+/*end of menu botton*/
+
+#title {
+    padding-top: 10%;
+    margin: 0% 5%;
+    text-align: center;
+    font-size: 20px;
+}
+
+.member{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:left;
+    width: 90%;
+    margin: 0% 5%;
+    padding: 5% 0%;
+}
+
+.pro_pic{
+    width: 100%;
+    max-height: 30%;
+}
+
+/*profile-f為第二欄專用*/
+.profile {
+    width: 15%;
+    text-align: center;
+}
+
+.profile img {
+    width: 100%;
+    border-radius: 50%;
+    margin: 0%;
+}
+
+
+.media{
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+}
+
+.media a{
+    width: 15%;
+    padding: 1%;
+    margin: auto 0%;
+}
+
+.media img{
+    width: 100%;
+    object-fit: contain;
+}
+
+/*hover時上浮*/
+.media img:hover{
+    transform: translateY(-4px);
+    transition: 0.5s;
+}
+
+.profile-content{
+    text-align: left;
+    padding-left: 5%;
+    width: 80%;
+    max-height: fit-content;
+}
+
+.profile-content h1{
+    margin: 0%;
+    margin-top: 10%;
+    max-height: 50px;
+}
+
+.paragraph{
+    text-align: left;
+    padding-top: 5%;
+    height: 80%;
+}
+
+#work {
+    background-color: white;
+    padding: 5% 5%;
+    text-align: center;
+    height: 70%;
+}
+
+/*==================================================
+ギャラリーのためのcss
+===================================*/
+
+/*＝＝＝並び替えボタンのCSS*/
+.sort-btn{
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	padding:50px 20px;
+}
+
+.sort-btn li{
+	background:#eee;
+list-style:none;
+	border-radius:10px;
+	cursor: pointer;
+	padding: 10px;
+	margin:0 10px;
+}
+
+.sort-btn li.active{/*ボタンに現在地＝activeというクラス名がついたら背景色を変更*/
+	background:#ccc;	
+}
+
+/*横幅が480px以下になった際の指定*/
+@media only screen and (max-width: 480px) {
+.sort-btn{
+	justify-content: space-between;
+}
+	
+.sort-btn li{
+	width:48%;
+	margin:0 0 10px 0;
+	text-align:center;
+	}	
+}
+
+/*＝＝＝Muuriのレイアウトのための調整 */
+.grid {
+  position: relative;/*並び替えの基準点を指定*/
+}
+
+/*各画像の横幅などの設定*/
+.item {
+  display: block;
+  position: absolute;
+  width: 100%;/*横並びで3つ表示*/
+  z-index: 1;
+list-style:none;
+}
+
+/*内側のボックスの高さが崩れないように維持*/
+.item-content {
+    justify-content: center;
+  position: relative;
+  display: flex;
+    flex-wrap: wrap;
+    float: inline-start;
+  width: 100%;
+  height: 100%;
+}
+
+/*画像の横幅を100%にしてレスポンシブ化*/
+.grid img{
+	width:100%;
+	height:auto;
+	vertical-align: bottom;/*画像の下にできる余白を削除*/
+}
+
+/*横幅が768px以下になった際の指定*/
+@media only screen and (max-width: 768px) {
+.item {
+  width: 49.5%;/*横並びで2つ表示*/
+}
+}
+
+/*＝＝＝fancyboxサムネイル背景と画像選択時の枠線の指定*/
+.fancybox-thumbs {
+    background: transparent!important;
+}
+
+.fancybox-thumbs__list a:before {
+    border: 6px solid #FA999B;
+}
+
+/*end of gallery*/
+
+.blog {
+    text-align: left;
+    object-fit: cover;
+    width: 230px;
+    margin: 0% 1%;
+    padding-top:5%;
+    color: #666;
+    overflow: hidden;
+}
+
+.blog p{
+    margin: 0%;
+}
+
+.pic {
+    width: 100%;
+    height: 230Px;
+    overflow: hidden;
+}
+
+.pic img {
+    margin: 0%;
+    width:100%;
+    height: 100%;
+    object-fit: cover;/*讓圖片保持原本的比例，同時填滿first_section區塊，所以會裁切掉部分圖片*/
+    object-position:50% 50%;/*置中*/
+}
+
+.pic img:hover{
+    transform: scale(1.1);
+    transition-duration: 2s;
+}
+
+
+footer {
+    background-color: gainsboro;
+    margin: 0px;
+    padding: 1%;
+}
+
+/*螢幕大小改變時改變組員2 的排版，使其跟其他組員相同*/
+@media screen and (max-width: 600px){
+    .text, .text2{
+        padding:0%;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+    }
+
+    /*螢幕大小為小顯示*/
+
+    .profile{
+        width: 80%;
+        margin: 0% 10%;
+    }
+
+    .media, .text2{
+        justify-content: center;
+        width: 100%;
+    }
+
+    .media a{
+        width: 10%;
+    }
+
+    .paragraph{
+        width: 85%;
+    }
+
+    /*螢幕大小為小時隱藏*/
+    .member-rev .profile, .text2 .media{
+        display: none;
+    }
+}
+
+
